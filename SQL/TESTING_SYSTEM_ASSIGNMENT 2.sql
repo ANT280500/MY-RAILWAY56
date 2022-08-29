@@ -1,108 +1,3 @@
--- DROP DATABASE IF EXISTS Testing_System_Assignment_1:
-CREATE DATABASE Testing_System_Assignment_1;
-
-USE Testing_System_Assignment_1;
-
-DROP TABLE IF EXISTS Department;
-CREATE TABLE `Department` (
-	DepartmentID 	TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    DepartmentName 	NVARCHAR(30) NOT NULL UNIQUE KEY
-);
-
-DROP TABLE IF EXISTS `Position`;
-CREATE TABLE `Position` (
-	PositionID		TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	PositionName 	ENUM('Dev','Test','Scrum Master','PM') NOT NULL UNIQUE KEY
-);
-
-DROP TABLE IF EXISTS `Account`;
-CREATE TABLE `Account` (
-	AccountID		TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	Email 			VARCHAR(50) NOT NULL UNIQUE KEY,
-    Username 		VARCHAR(50) NOT NULL UNIQUE KEY,
-	Fullname 		NVARCHAR(50) NOT NULL,
-    DepartmentID	TINYINT UNSIGNED NOT NULL,
-    PositionID		TINYINT UNSIGNED NOT NULL,
-    CreateDate		DATETIME DEFAULT NOW(),
-	FOREIGN KEY(DepartmentID) REFERENCES Department(DepartmentID),
-    FOREIGN KEY(PositionID) REFERENCES `Position`(PositionID)
-);
-    
-DROP TABLE IF EXISTS `Group`;
-CREATE TABLE `Group`(
-	GroupID 		TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    GroupName		NVARCHAR(50) NOT NULL UNIQUE KEY,
-    CreatorID		TINYINT UNSIGNED,
-    CreateDate		DATETIME DEFAULT NOW(),
-    FOREIGN KEY(CreatorId) REFERENCES `Account`(Accountld)
-);
-    
-DROP TABLE IF EXISTS `GroupAccount`;
-CREATE TABLE `GroupAccount`(
-	GroupID 		TINYINT UNSIGNED NOT NULL,
-	AccountID 		TINYINT UNSIGNED NOT NULL,
-	JoinDate 		DATETIME DEFAULT NOW(),
-	PRIMARY KEY (GroupID,AccountID),
-	FOREIGN KEY(GroupID) REFERENCES `Group`(GroupID),
-	FOREIGN KEY(AccountID) REFERENCES `Account`(AccountID)
-);
-
-DROP TABLE IF EXISTS `TypeQuestion`;
-CREATE TABLE `TypeQuestion`(
-	TypeID 			TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    TypeName 		ENUM('Essay','Multiple-Choice') NOT NULL UNIQUE KEY
-);
-
-DROP TABLE IF EXISTS `CategoryQuestion`;
-CREATE TABLE `CategoryQuestion`(
-	CategoryID 		TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    Categoryame 	NVARCHAR(50) NOT NULL UNIQUE KEY
-);
-
-DROP TABLE IF EXISTS `Question`;
-CREATE TABLE `Question`(
-	QuestionID 		TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    Content			NVARCHAR(100) NOT NULL,
-    CategoryID 		TINYINT UNSIGNED NOT NULL,
-    TypeID			TINYINT UNSIGNED NOT NULL,
-    CreatorID		TINYINT UNSIGNED NOT NULL,
-    CreateDate		DATETIME DEFAULT NOW(),
-    FOREIGN KEY(CategoryID) REFERENCES CategoryQuestion(CategoryID),
-    FOREIGN KEY(TypeID)	REFERENCES TypeQuestion(TypeID),
-    FOREIGN KEY(CreatorID) REFERENCES `Account`(AccountID)
-    );
-
-DROP TABLE IF EXISTS `Answer`;
-CREATE TABLE `Answer`(
-	AnswerId 		TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    Content 		NVARCHAR(100) NOT NULL,
-    QuestionID 		TINYINT UNSIGNED NOT NULL,
-    isCorrect 		BIT DEFAULT 1,
-    FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID)
-);
-
-DROP TABLE IF EXISTS `Exam`;
-CREATE TABLE `Exam`(
-ExamID 			TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-`Code` 			CHAR(10) NOT NULL,
-Title 			NVARCHAR(50) NOT NULL,
-CategoryID 		TINYINT UNSIGNED NOT NULL,
-Duration 		TINYINT UNSIGNED NOT NULL,
-CreatorID 		TINYINT UNSIGNED NOT NULL,
-CreateDate 		DATETIME DEFAULT NOW(),
-FOREIGN KEY(CategoryID) REFERENCES CategoryQuestion(CategoryID),
-FOREIGN KEY(CreatorID) REFERENCES `Account`(AccountId)
-);
-
-
-DROP TABLE IF EXISTS `ExamQuestion`;
-CREATE TABLE `ExamQuestion`(
-	ExamID		TINYINT UNSIGNED NOT NULL,
-    QuestionID 	TINYINT UNSIGNED NOT NULL,
-    FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID),
-    FOREIGN KEY(ExamID)	REFERENCES Exam(ExamID),
-    PRIMARY KEY(ExamID,QuestionID)
-);
     
 INSERT INTO `Department`(DepartmentName)
 VALUES 	('Marketing'),
@@ -165,7 +60,7 @@ INSERT INTO `TypeQuestion`	(TypeName)
 VALUES						('Essay'),
 							('Multiple-Choice');
                             
-INSERT INTO `CategoryQuestion`	(CategoryName)
+INSERT INTO `CategoryQuestion` (CategoryName)
 VALUES 							('Java'),
 								('ASP.NET'),
                                 ('ADO.NET'),
@@ -177,7 +72,7 @@ VALUES 							('Java'),
                                 ('C Sharp'),
                                 ('PHP');
                                 
-INSERT INTO `Question`	(Content , CategorID , TypeID , CreatorID , CreateDate)
+INSERT INTO `Question`	(Content , CategorYID , TypeID , CreatorID , CreateDate)
 VALUES					('Câu hỏi về Java'		, 1 , '1' , '2' ,'2020-04-05'),
 						('Câu Hỏi về PHP' 		, 10 ,'2' , '2' ,'2020-04-05'),
 						('Hỏi về C#' 			, 9 ,'2' , '3' ,'2020-04-06'),
@@ -212,6 +107,7 @@ VALUES 				('VTIQ001' 	, 'Đề thi C#' 		, 1 , 60 , '5' ,'2019-04-05'),
 					('VTIQ008' 	, 'Đề thi Python' 	, 8 , 60 , '8' ,'2020-04-07'),
 					('VTIQ009' 	, 'Đề thi ADO.NET'	, 4 , 90 , '9' ,'2020-04-07'),
 					('VTIQ010'	, 'Đề thi ASP.NET' 	, 7 , 90 , '10' ,'2020-04-08');
+                    
 INSERT INTO `ExamQuestion`(ExamID , QuestionID )
 VALUES 					(1 , 5),
 						(2 , 10),
@@ -223,3 +119,4 @@ VALUES 					(1 , 5),
 						(8 , 10),
 						(9 , 9),
 						(10 , 8);
+                        
