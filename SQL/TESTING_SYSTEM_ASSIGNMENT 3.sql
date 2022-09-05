@@ -6,13 +6,17 @@ ORDER BY DepartmentID;
 
 SELECT 	DepartmentID
 FROM	`Department`
-WHERE	DepartmentName = N'Sale';
+WHERE	DepartmentName = 'Sale';
 
+SELECT * FROM `Account` 
+WHERE LENGTH(Fullname) = (SELECT MAX(LENGTH(Fullname)) FROM `Account`)
+ORDER BY AccountID;
 
-?????4
+WITH CTE_DEP3 AS (SELECT * FROM `Account` WHERE DepartmentID = 3)
 
-???????5
-
+SELECT * FROM `CTE_DEP3`
+WHERE LENGTH(Fullname) = (SELECT MAX(LENGTH(Fullname)) FROM `CTE_DEP3`)
+ORDER BY Fullname;
 
 SELECT 	GroupName,
 		CreateDate
@@ -37,12 +41,21 @@ SELECT 	`DepartmentID`,COUNT(AccountID) AS SL
 FROM 	`Account`
 WHERE	DepartmentID = 2;
 
+SELECT Fullname
+FROM 	`Account`
+WHERE 	FullName LIKE 'D%o';
+SELECT 	(SUBSTRING_INDEX(FullName, ' ', 1)) FROM `Account`;
+SELECT 	(SUBSTRING_INDEX(FullName, ' ', 2)) FROM `Account`;
+SELECT 	(SUBSTRING_INDEX(FullName, ' ', 3)) FROM `Account`;
 
-????11
+DELETE 
+FROM	`Exam` 
+WHERE	CreateDate < '2019-12-20';
 
-????12
-
-?????13
+DELETE 
+FROM 	`Question` 
+WHERE 	(SUBSTRING_INDEX(Content, ' ', 2)) = 'câu hỏi';
+SELECT 	(SUBSTRING_INDEX(Content, ' ', 2)) = 'câu hỏi' FROM `Question`;
 
 UPDATE `Account`
 SET Fullname 	=	'Nguyễn Bá Lộc',
