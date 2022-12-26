@@ -1785,5 +1785,5 @@ insert into ExamQuestion (ExamID, QuestionID) values (6, 62);
 insert into ExamQuestion (ExamID, QuestionID) values (8, 107);
 
 
--- ===================================================
+-- =================================================== --
 
